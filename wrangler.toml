@@ -1,0 +1,13 @@
+name = "brandourjersey-api"
+main = "worker/index.js"
+compatibility_date = "2026-08-01"
+
+# Public, non-secret settings. Secrets go in with `wrangler secret put`.
+[vars]
+SITE_URL = "https://brandourjersey.com"
+DODO_ENVIRONMENT = "test_mode"   # switch to "live_mode" when you go live
+
+[[d1_databases]]
+binding = "DB"
+database_name = "brandourjersey"
+database_id = "97cfb367-cfb4-47ee-b991-b64d07239ee3"

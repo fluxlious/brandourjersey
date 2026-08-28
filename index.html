@@ -1,0 +1,1570 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Brand Our Jersey</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Jersey+10&display=swap">
+<!--
+  ══════════════════════════════════════════════════════════════
+  BRAND OUR JERSEY — prototype (no payments yet)
+  WHEN A SPOT SELLS: edit the SPOTS block in the script at the
+  bottom of this file. Nothing else.
+
+  Other things you might change:
+    · Contact email:  search for "hello@brandourjersey.com"
+    · Prices:         the seven .spot-card blocks (and SPOTS in worker/index.js)
+    · Season goal:    search for "€630"
+  ══════════════════════════════════════════════════════════════
+-->
+<style>
+  :root {
+    --red: #C4162B;
+    --red-deep: #8E0F1F;
+    --ink: #17131A;
+    --paper: #F7F4F2;
+    --line: rgba(23, 19, 26, 0.14);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; animation: none !important; }
+  }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
+  }
+  .display {
+    font-family: "Anton", "Arial Narrow", sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+  }
+  .px { font-family: "Jersey 10", "Anton", monospace; font-weight: 400; }
+  .eyebrow {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Hero ─────────────────────────────── */
+  .hero {
+    background: var(--red);
+    border-bottom: 3px solid var(--ink);
+  }
+  .hero .crest {
+    display: block;
+    box-sizing: border-box;
+    width: 84px;
+    height: 84px;
+    padding: 13px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: var(--red);
+    object-fit: contain;
+    margin-bottom: 20px;
+  }
+  .hero .eyebrow, .hero .lede { color: #FFF4F2; }
+  .hero .lede a { color: inherit; }
+  .hero .wrap { padding-top: 72px; padding-bottom: 60px; }
+  .hero-grid { display: block; }
+  /* Full-bleed: eleven faces need the whole width to be legible at all. */
+  .hero-shot {
+    margin: 0;
+    border-top: 3px solid var(--ink);
+  }
+  .hero-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 78vh;
+    object-fit: cover;
+    object-position: center 42%;
+  }
+  .hero-shot figcaption {
+    padding: 12px 24px 4px;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: #FFE9E5;
+    max-width: 1060px;
+    margin: 0 auto;
+  }
+  .hero h1 {
+    font-size: clamp(2.7rem, 7.5vw, 5.4rem);
+    line-height: 0.95;
+    margin: 20px 0 22px;
+    text-wrap: balance;
+    max-width: 12ch;
+  }
+  .hero p.lede {
+    font-size: 1.15rem;
+    max-width: 54ch;
+    margin: 0 0 32px;
+  }
+  .hero p.lede strong { font-weight: 700; }
+  .statbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    max-width: 720px;
+  }
+  .stat {
+    flex: 1 1 160px;
+    padding: 14px 20px 10px;
+    border-right: 2px solid var(--ink);
+  }
+  .stat:last-child { border-right: none; }
+  .stat .num {
+    font-family: "Jersey 10", "Anton", monospace;
+    font-size: 2.6rem;
+    line-height: 1;
+    display: block;
+  }
+  .stat .lbl {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .hero-cta {
+    display: inline-block;
+    margin-top: 28px;
+    background: var(--ink);
+    color: var(--paper);
+    text-decoration: none;
+    font-family: "Anton", sans-serif;
+    text-transform: uppercase;
+    font-size: 1.02rem;
+    letter-spacing: 0.05em;
+    padding: 15px 30px;
+  }
+  .hero-cta:hover { background: #000; }
+
+  /* ── Inventory ────────────────────────── */
+  .inventory .wrap { max-width: 1200px; padding-top: 84px; padding-bottom: 88px; }
+  .section-head { margin-bottom: 40px; max-width: 58ch; }
+  .section-head h2 {
+    font-size: clamp(1.75rem, 3.4vw, 2.4rem);
+    margin: 6px 0 10px;
+    line-height: 1.05;
+  }
+  .section-head p { margin: 0; }
+  .inv-grid {
+    display: grid;
+    grid-template-columns: minmax(340px, 600px) 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  @media (max-width: 980px) {
+    .inv-grid { grid-template-columns: 1fr; }
+    .jersey-panel { position: static; max-width: 520px; }
+  }
+  .jersey-panel { position: sticky; top: 24px; }
+  .view-toggle {
+    display: inline-flex;
+    border: 2px solid var(--ink);
+    margin-bottom: 16px;
+  }
+  .view-toggle button {
+    font-family: "Anton", sans-serif;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    background: var(--paper);
+    color: var(--ink);
+    border: none;
+    padding: 8px 22px;
+    cursor: pointer;
+  }
+  .view-toggle button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .jersey-stage { perspective: 1400px; }
+  .jersey-stage svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 14px 26px rgba(23, 19, 26, 0.16));
+  }
+  .flip {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.35, 0.1, 0.2, 1);
+  }
+  .flip.show-back { transform: rotateY(180deg); }
+  .jersey-stage .view { backface-visibility: hidden; }
+  .jersey-stage #view-back {
+    position: absolute;
+    inset: 0;
+    transform: rotateY(180deg);
+  }
+  .jersey-stage .view:not(.on) { pointer-events: none; }
+  .zone rect {
+    fill: rgba(247, 244, 242, 0.82);
+    stroke: var(--ink);
+    stroke-width: 2;
+    stroke-dasharray: 6 5;
+    cursor: pointer;
+    transition: fill 0.15s ease;
+  }
+  .zone text {
+    font-family: "Jersey 10", monospace;
+    font-size: 34px;
+    fill: var(--ink);
+    text-anchor: middle;
+    pointer-events: none;
+  }
+  .zone.hot rect, .zone:hover rect {
+    fill: var(--ink);
+    stroke-dasharray: none;
+    stroke-width: 3;
+  }
+  .zone .zone-label {
+    font-family: "Archivo", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+  }
+  .zone.hot text, .zone:hover text { fill: var(--red); }
+  /* Sold spots win over every hover state — keep these rules last.
+     No box: a real sponsor sits straight on the stripes, not in a panel. */
+  .zone.sold rect, .zone.sold.hot rect, .zone.sold:hover rect {
+    fill: none;
+    stroke: none;
+    cursor: default;
+  }
+  .zone.sold text { display: none; }
+  .zone.sold text.zone-wordmark { display: block; }
+  /* Needs to outrank `.zone text`, which sets the pixel-number face.
+     Outlined like the shirt number so it reads over red and black alike. */
+  .zone text.zone-wordmark {
+    font-family: "Anton", "Arial Narrow", sans-serif;
+    fill: #FFFFFF;
+    stroke: var(--ink);
+    stroke-width: 4;
+    stroke-linejoin: round;
+    paint-order: stroke;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+  .zone-logo { pointer-events: none; }
+  .stage-note { font-size: 0.85rem; margin-top: 10px; color: rgba(23,19,26,0.7); }
+
+  .spot-list { display: grid; gap: 14px; }
+  .spot-card {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: 18px;
+    align-items: center;
+    border: 2px solid var(--ink);
+    background: #fff;
+    padding: 16px 20px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .spot-card.hot, .spot-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .spot-card .no {
+    font-family: "Jersey 10", monospace;
+    font-size: 3.4rem;
+    line-height: 1;
+    text-align: center;
+  }
+  .spot-card h3 { margin: 0 0 2px; font-size: 1.05rem; }
+  .spot-card .meta {
+    font-size: 0.8rem;
+    color: rgba(23,19,26,0.7);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+  }
+  .spot-card .side {
+    text-align: right;
+    display: grid;
+    gap: 8px;
+    justify-items: end;
+  }
+  .price {
+    font-family: "Jersey 10", monospace;
+    font-size: 2.1rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .price small {
+    font-family: "Archivo", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+  }
+  /* Open is the resting state, so it stays quiet; Taken is the one that
+     should catch the eye. */
+  .pill {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    color: rgba(23, 19, 26, 0.62);
+    background: none;
+    border: 1px solid var(--line);
+    padding: 3px 9px;
+  }
+  .claim {
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--red);
+    color: #fff;
+    border: 2px solid var(--ink);
+    padding: 7px 14px;
+  }
+  .claim:hover { background: var(--ink); color: var(--paper); }
+  .spot-card.sold { background: #F5F0ED; }
+  .spot-card.sold .no { opacity: 0.4; }
+  .pill.taken { background: var(--red); border-color: var(--red); color: #fff; }
+  .claim.taken { background: var(--ink); color: var(--paper); }
+  .claim.taken:hover { background: var(--red); color: #fff; }
+  @media (max-width: 560px) {
+    .spot-card { grid-template-columns: 48px 1fr; }
+    .spot-card .no { font-size: 2.4rem; }
+    .spot-card .side { grid-column: 1 / -1; justify-items: start; text-align: left; }
+  }
+
+  /* Sits at the end of the spot list, where the decision actually happens. */
+  .included {
+    border: 2px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 22px 24px 20px;
+  }
+  .included h3 {
+    margin: 0 0 14px;
+    font-size: 1.15rem;
+    color: var(--red);
+  }
+  .included ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 9px;
+  }
+  .included li {
+    position: relative;
+    padding-left: 26px;
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  .included li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.42em;
+    width: 11px;
+    height: 11px;
+    background: var(--red);
+  }
+  .included-note {
+    margin: 16px 0 0;
+    padding-top: 14px;
+    border-top: 2px solid rgba(247, 244, 242, 0.22);
+    font-size: 0.85rem;
+    color: rgba(247, 244, 242, 0.8);
+  }
+
+  /* ── How it works / pitch ─────────────── */
+  .how { background: var(--ink); color: var(--paper); }
+  .how .wrap { padding-top: 80px; padding-bottom: 80px; }
+  .how .section-head h2 { color: var(--red); }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 28px;
+    margin-top: 8px;
+  }
+  .step { border-top: 3px solid var(--red); padding-top: 14px; }
+  .step .no {
+    font-family: "Jersey 10", monospace;
+    font-size: 2.4rem;
+    color: var(--red);
+    line-height: 1;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .step h3 { margin: 0 0 6px; font-size: 1.05rem; }
+  .step p { margin: 0; font-size: 0.95rem; color: rgba(250,248,240,0.85); }
+
+  .pitch .wrap { padding-top: 80px; padding-bottom: 72px; }
+  /* Read as a team sheet: a squad number, then the player. */
+  .pitch ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 2px solid var(--line);
+  }
+  .pitch li {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 4px 24px;
+    align-items: baseline;
+    padding: 20px 0;
+    border-bottom: 2px solid var(--line);
+  }
+  .pitch li .kit-no {
+    font-family: "Jersey 10", monospace;
+    font-size: 3.2rem;
+    line-height: 0.8;
+    color: var(--red);
+    grid-row: span 2;
+  }
+  .pitch li strong {
+    font-family: "Anton", "Arial Narrow", sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 1.25rem;
+  }
+  .pitch li span.line { font-size: 0.98rem; max-width: 62ch; }
+  @media (max-width: 560px) {
+    .pitch li { grid-template-columns: 56px 1fr; gap: 4px 16px; }
+    .pitch li .kit-no { font-size: 2.2rem; }
+  }
+
+  /* ── Team photo ───────────────────────── */
+  .proof .wrap { padding-top: 48px; padding-bottom: 8px; }
+  .proof figure { margin: 0; }
+  .proof img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 3px solid var(--ink);
+    box-shadow: 10px 10px 0 rgba(23, 19, 26, 0.12);
+  }
+  .proof figcaption {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: rgba(23, 19, 26, 0.7);
+    max-width: 62ch;
+  }
+
+  [data-when] { display: none; }
+  :root[data-flow="card"] [data-when="card"] { display: revert; }
+  :root[data-flow="email"] [data-when="email"] { display: revert; }
+
+  /* The kit's own stripes, borrowed as a rule between sections. */
+  .stripe-rule {
+    height: 10px;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    background: repeating-linear-gradient(
+      90deg,
+      var(--red) 0 18px,
+      var(--ink) 18px 34px
+    );
+  }
+
+  /* ── FAQ ──────────────────────────────── */
+  .faq .wrap { padding-top: 80px; padding-bottom: 88px; max-width: 760px; }
+  .faq details {
+    border-bottom: 2px solid var(--line);
+    padding: 6px 0;
+  }
+  .faq summary {
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.02rem;
+    padding: 12px 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after {
+    content: "+";
+    font-family: "Jersey 10", monospace;
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+  .faq details[open] summary::after { content: "–"; }
+  .faq details p { margin: 0 0 16px; max-width: 62ch; }
+
+  /* ── Claim dialog ─────────────────────── */
+  #claim-dialog {
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    padding: 0;
+    max-width: 420px;
+    width: calc(100% - 32px);
+    box-shadow: 0 18px 44px rgba(23, 19, 26, 0.28);
+  }
+  #claim-dialog::backdrop { background: rgba(23, 19, 26, 0.55); }
+  #claim-form {
+    display: grid;
+    gap: 12px;
+    padding: 26px 24px 22px;
+  }
+  #claim-title { font-size: 1.6rem; margin: 0; line-height: 1.05; }
+  .claim-lede { margin: 0; font-size: 0.92rem; color: rgba(23, 19, 26, 0.72); }
+  #claim-form label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-top: 4px;
+  }
+  #claim-url {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 11px 13px;
+    border: 2px solid var(--ink);
+    background: #fff;
+    color: var(--ink);
+    width: 100%;
+  }
+  .claim-error {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--red-deep);
+  }
+  .claim-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 6px;
+  }
+  .claim-actions button {
+    font-family: "Archivo", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 10px 16px;
+    border: 2px solid var(--ink);
+    cursor: pointer;
+  }
+  #logo-dialog {
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    padding: 0;
+    max-width: 420px;
+    width: calc(100% - 32px);
+    box-shadow: 0 18px 44px rgba(23, 19, 26, 0.28);
+  }
+  #logo-dialog::backdrop { background: rgba(23, 19, 26, 0.55); }
+  #logo-form {
+    display: grid;
+    gap: 12px;
+    padding: 26px 24px 22px;
+  }
+  #logo-title { font-size: 1.6rem; margin: 0; line-height: 1.05; }
+  #logo-form label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-top: 4px;
+  }
+  #logo-file { font-family: inherit; font-size: 0.9rem; }
+  #logo-form label.logo-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-top: 0;
+    cursor: pointer;
+  }
+  /* Previewed on the actual stripes, so a leftover background box is obvious. */
+  #logo-preview {
+    border: 2px solid var(--ink);
+    background: repeating-linear-gradient(
+      90deg,
+      var(--red) 0 14px,
+      var(--ink) 14px 26px
+    );
+    padding: 14px;
+    display: grid;
+    place-items: center;
+  }
+  #logo-preview img { max-width: 100%; max-height: 110px; display: block; }
+  #logo-skip { background: var(--paper); color: var(--ink); }
+  #logo-submit { background: var(--red); color: #fff; }
+  #logo-submit:hover { background: var(--ink); }
+  #logo-submit[disabled] { opacity: 0.6; cursor: default; }
+
+  #claim-cancel { background: var(--paper); color: var(--ink); }
+  #claim-submit { background: var(--red); color: #fff; }
+  #claim-submit:hover { background: var(--ink); }
+  #claim-submit[disabled] { opacity: 0.6; cursor: default; }
+
+  /* ── Footer ───────────────────────────── */
+  footer {
+    background: var(--ink);
+    color: var(--paper);
+    border-top: 3px solid var(--red);
+  }
+  footer .sig { color: var(--red); }
+  footer .wrap {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: space-between;
+    align-items: end;
+  }
+  footer .sig {
+    font-family: "Anton", sans-serif;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    line-height: 1.1;
+  }
+  footer a { font-weight: 600; }
+  footer .fine { font-size: 0.8rem; max-width: 42ch; }
+</style>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+    <img class="crest" src="logo.png" alt="Team crest: a wolf's head">
+    <span class="eyebrow">A student football team in Dortmund · Season 2026/27</span>
+    <h1 class="display">Brand our jersey.</h1>
+    <p class="lede">
+      Last season our chest carried <strong>a liquor brand that never paid us a cent</strong>.
+      We never asked them. It ran a full season, nobody said a word, and the company still has
+      no idea. This year we're doing it properly: seven spots on the shirt, from €35, worn at
+      every match of the season. One of them could be yours.
+    </p>
+    <div class="statbar" role="group" aria-label="Campaign status">
+      <div class="stat"><span class="num" id="stat-num">6</span><span class="lbl" id="stat-lbl">spots on the shirt</span></div>
+      <div class="stat"><span class="num">€35</span><span class="lbl">cheapest spot</span></div>
+      <div class="stat" id="stat-views" hidden><span class="num" id="views-num">—</span><span class="lbl">people have looked</span></div>
+      <div class="stat"><span class="num">12 Oct</span><span class="lbl">first whistle</span></div>
+    </div>
+    <a class="hero-cta" href="#spots">See the spots</a>
+    </div>
+  </div>
+  <figure class="hero-shot">
+    <img src="team.jpg" alt="The squad lined up in front of the goal in last season's red and black kit">
+    <figcaption>Last season's squad, wearing a sponsor that was never ours to wear. Same colours this year — the chest is up for grabs.</figcaption>
+  </figure>
+</header>
+
+<main>
+  <section class="inventory" id="spots">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">The inventory</span>
+        <h2 class="display">One jersey. Seven ad spots.</h2>
+        <p>Hover a spot on the shirt or in the list. Prices are season minimums —
+           your logo stays on for every match, training, and questionable post-game photo.</p>
+      </div>
+      <div class="inv-grid">
+        <div class="jersey-panel">
+          <div class="view-toggle" role="group" aria-label="Jersey view">
+            <button type="button" id="btn-front" aria-pressed="true">Front</button>
+            <button type="button" id="btn-back" aria-pressed="false">Back</button>
+          </div>
+          <div class="jersey-stage">
+            <div class="flip" id="flip">
+            <!-- FRONT -->
+            <svg class="view on" id="view-front" viewBox="0 0 360 366" aria-label="Jersey front with ad spots 1 to 4">
+              <defs>
+                <clipPath id="clip-front">
+                  <path d="M143 24 Q180 48 217 24 L262 38 L336 64 L316 130 L272 114 L272 344 L88 344 L88 114 L44 130 L24 64 L98 38 Z"/>
+                </clipPath>
+              </defs>
+              <g clip-path="url(#clip-front)">
+                <rect x="0" y="0" width="360" height="390" fill="#C4162B"/>
+                <g fill="#17131A">
+                  <rect x="31" y="0" width="18" height="390"/>
+                  <rect x="71" y="0" width="18" height="390"/>
+                  <rect x="111" y="0" width="18" height="390"/>
+                  <rect x="151" y="0" width="18" height="390"/>
+                  <rect x="191" y="0" width="18" height="390"/>
+                  <rect x="231" y="0" width="18" height="390"/>
+                  <rect x="271" y="0" width="18" height="390"/>
+                  <rect x="311" y="0" width="18" height="390"/>
+                </g>
+              </g>
+              <path d="M143 24 Q180 48 217 24 L262 38 L336 64 L316 130 L272 114 L272 344 L88 344 L88 114 L44 130 L24 64 L98 38 Z"
+                    fill="none" stroke="#17131A" stroke-width="5" stroke-linejoin="round"/>
+              <path d="M44 130 L88 114" stroke="#17131A" stroke-width="9"/>
+              <path d="M316 130 L272 114" stroke="#17131A" stroke-width="9"/>
+              <rect x="88" y="330" width="184" height="14" fill="#17131A"/>
+              <path d="M143 22 Q180 50 217 22" fill="none" stroke="#17131A" stroke-width="12" stroke-linecap="round"/>
+              <g class="crest-badge">
+                <circle cx="226" cy="78" r="20" fill="#C4162B" stroke="#FFFFFF" stroke-width="2.5"/>
+                <image href="logo.png" x="212" y="64" width="28" height="27"/>
+              </g>
+              <g class="zone" data-spot="1">
+                <rect x="100" y="132" width="160" height="70"/>
+                <text x="180" y="172">1</text>
+                <text class="zone-label" x="180" y="190">YOUR LOGO HERE</text>
+              </g>
+              <g class="zone" data-spot="2"><rect x="40" y="66" width="50" height="46"/><text x="65" y="100">2</text></g>
+              <g class="zone" data-spot="3"><rect x="270" y="66" width="50" height="46"/><text x="295" y="100">3</text></g>
+              <g class="zone" data-spot="4"><rect x="100" y="256" width="160" height="58"/><text x="180" y="295">4</text></g>
+            </svg>
+            <!-- BACK -->
+            <svg class="view" id="view-back" viewBox="0 0 360 366" aria-label="Jersey back with ad spots 5 and 6">
+              <defs>
+                <clipPath id="clip-back">
+                  <path d="M143 24 Q180 48 217 24 L262 38 L336 64 L316 130 L272 114 L272 344 L88 344 L88 114 L44 130 L24 64 L98 38 Z"/>
+                </clipPath>
+              </defs>
+              <g clip-path="url(#clip-back)">
+                <rect x="0" y="0" width="360" height="390" fill="#C4162B"/>
+                <g fill="#17131A">
+                  <rect x="31" y="0" width="18" height="390"/>
+                  <rect x="71" y="0" width="18" height="390"/>
+                  <rect x="111" y="0" width="18" height="390"/>
+                  <rect x="151" y="0" width="18" height="390"/>
+                  <rect x="191" y="0" width="18" height="390"/>
+                  <rect x="231" y="0" width="18" height="390"/>
+                  <rect x="271" y="0" width="18" height="390"/>
+                  <rect x="311" y="0" width="18" height="390"/>
+                </g>
+              </g>
+              <path d="M143 24 Q180 36 217 24 L262 38 L336 64 L316 130 L272 114 L272 344 L88 344 L88 114 L44 130 L24 64 L98 38 Z"
+                    fill="none" stroke="#17131A" stroke-width="5" stroke-linejoin="round"/>
+              <path d="M44 130 L88 114" stroke="#17131A" stroke-width="9"/>
+              <path d="M316 130 L272 114" stroke="#17131A" stroke-width="9"/>
+              <rect x="88" y="330" width="184" height="14" fill="#17131A"/>
+              <path d="M143 22 Q180 38 217 22" fill="none" stroke="#17131A" stroke-width="10" stroke-linecap="round"/>
+              <text x="180" y="250" text-anchor="middle" font-family="'Jersey 10', monospace" font-size="140"
+                    fill="#FFFFFF" stroke="#17131A" stroke-width="5" stroke-linejoin="round" paint-order="stroke">9</text>
+              <g class="zone" data-spot="7"><rect x="144" y="50" width="72" height="32"/><text x="180" y="76">7</text></g>
+              <g class="zone" data-spot="5"><rect x="96" y="104" width="168" height="50"/><text x="180" y="140">5</text></g>
+              <g class="zone" data-spot="6"><rect x="96" y="262" width="168" height="50"/><text x="180" y="298">6</text></g>
+            </svg>
+            </div>
+          </div>
+          <p class="stage-note">Number 9 stays ours. Everything dashed is yours.</p>
+        </div>
+
+        <div class="spot-list">
+          <article class="spot-card" data-spot="1" data-view="front">
+            <span class="no">1</span>
+            <div>
+              <h3>The Chest</h3>
+              <p class="meta"><span>Front · main sponsor</span><span>~22 × 10 cm</span><span>Last season's uninvited guest sat here</span></p>
+            </div>
+            <div class="side">
+              <span class="pill">Open</span>
+              <span class="price"><small>from</small>€200</span>
+              <a class="claim" href="mailto:hello@brandourjersey.com?subject=Claim%20spot%201%20%E2%80%93%20The%20Chest">Claim spot 1</a>
+            </div>
+          </article>
+          <article class="spot-card" data-spot="2" data-view="front">
+            <span class="no">2</span>
+            <div>
+              <h3>Left Sleeve</h3>
+              <p class="meta"><span>Front · sleeve</span><span>~8 × 8 cm</span><span>Visible in every throw-in</span></p>
+            </div>
+            <div class="side">
+              <span class="pill">Open</span>
+              <span class="price"><small>from</small>€60</span>
+              <a class="claim" href="mailto:hello@brandourjersey.com?subject=Claim%20spot%202%20%E2%80%93%20Left%20Sleeve">Claim spot 2</a>
+            </div>
+          </article>
+          <article class="spot-card" data-spot="3" data-view="front">
+            <span class="no">3</span>
+            <div>
+              <h3>Right Sleeve</h3>
+              <p class="meta"><span>Front · sleeve</span><span>~8 × 8 cm</span><span>Our better throw-in side</span></p>
+            </div>
+            <div class="side">
+              <span class="pill">Open</span>
+              <span class="price"><small>from</small>€60</span>
+              <a class="claim" href="mailto:hello@brandourjersey.com?subject=Claim%20spot%203%20%E2%80%93%20Right%20Sleeve">Claim spot 3</a>
+            </div>
+          </article>
+          <article class="spot-card" data-spot="4" data-view="front">
+            <span class="no">4</span>
+            <div>
+              <h3>Front Hem</h3>
+              <p class="meta"><span>Front · below chest</span><span>~22 × 8 cm</span><span>Prime real estate when we tuck it in</span></p>
+            </div>
+            <div class="side">
+              <span class="pill">Open</span>
+              <span class="price"><small>from</small>€35</span>
+              <a class="claim" href="mailto:hello@brandourjersey.com?subject=Claim%20spot%204%20%E2%80%93%20Front%20Hem">Claim spot 4</a>
+            </div>
+          </article>
+          <article class="spot-card" data-spot="5" data-view="back">
+            <span class="no">5</span>
+            <div>
+              <h3>Back Top</h3>
+              <p class="meta"><span>Back · above the number</span><span>~24 × 8 cm</span><span>Where player names usually go</span></p>
+            </div>
+            <div class="side">
+              <span class="pill">Open</span>
+              <span class="price"><small>from</small>€120</span>
+              <a class="claim" href="mailto:hello@brandourjersey.com?subject=Claim%20spot%205%20%E2%80%93%20Back%20Top">Claim spot 5</a>
+            </div>
+          </article>
+          <article class="spot-card" data-spot="6" data-view="back">
+            <span class="no">6</span>
+            <div>
+              <h3>Back Bottom</h3>
+              <p class="meta"><span>Back · below the number</span><span>~24 × 8 cm</span><span>Seen by everyone chasing us</span></p>
+            </div>
+            <div class="side">
+              <span class="pill">Open</span>
+              <span class="price"><small>from</small>€110</span>
+              <a class="claim" href="mailto:hello@brandourjersey.com?subject=Claim%20spot%206%20%E2%80%93%20Back%20Bottom">Claim spot 6</a>
+            </div>
+          </article>
+          <article class="spot-card" data-spot="7" data-view="back">
+            <span class="no">7</span>
+            <div>
+              <h3>The Nape</h3>
+              <p class="meta"><span>Back · under the collar</span><span>~10 × 4 cm</span><span>Small, and the only one nobody else has</span></p>
+            </div>
+            <div class="side">
+              <span class="pill">Open</span>
+              <span class="price"><small>from</small>€45</span>
+              <a class="claim" href="mailto:hello@brandourjersey.com?subject=Claim%20spot%207%20%E2%80%93%20The%20Nape">Claim spot 7</a>
+            </div>
+          </article>
+
+          <aside class="included">
+            <h3 class="display">Every spot includes</h3>
+            <ul>
+              <li>Your logo printed on the shirt for the whole 2026/27 season</li>
+              <li data-when="card">Your logo and a link to your site on this page, up the moment you pay</li>
+              <li data-when="email">Your logo and a link to your site on this page, up as soon as you send it</li>
+              <li>Artwork sent to you for approval before anything goes to the printer</li>
+              <li>A photo of the finished shirt, and your name in our match posts</li>
+            </ul>
+            <p class="included-note">One payment. No renewal, no subscription, nothing to cancel.</p>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stripe-rule" role="presentation"></div>
+
+  <section class="how">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">How it works</span>
+        <h2 class="display">Four steps, about two minutes.</h2>
+        <p data-when="card">Card payment is handled by Dodo Payments. We never see your card details, and nothing gets posted to you.</p>
+        <p data-when="email">Card checkout is being switched on this week. Until it is, one email does the same job — and nothing gets posted to you either way.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="no">1</span>
+          <h3>Pick your spot</h3>
+          <p data-when="card">Choose one of the seven spots and enter your website. That holds it for fifteen minutes so nobody buys it out from under you.</p>
+          <p data-when="email">Hit the claim button on the spot you want. It opens an email to us with the spot already in the subject line.</p>
+        </div>
+        <div class="step">
+          <span class="no">2</span>
+          <h3 data-when="card">Pay by card</h3>
+          <h3 data-when="email">We confirm and invoice</h3>
+          <p data-when="card">You land on Dodo's checkout, pay the price shown, and come straight back. One payment, one season, no subscription.</p>
+          <p data-when="email">We reply the same day, hold the spot for you, and send bank details. One payment, one season, no subscription.</p>
+        </div>
+        <div class="step">
+          <span class="no">3</span>
+          <h3>Your logo goes up</h3>
+          <p data-when="card">Back on this page, upload your logo and it appears on the jersey above within seconds. Send a better file later and we'll swap it.</p>
+          <p data-when="email">Send us your logo and it goes on the jersey above, usually the same day. Send a better file later and we'll swap it.</p>
+        </div>
+        <div class="step">
+          <span class="no">4</span>
+          <h3>We print and play</h3>
+          <p>Once the spots are gone we order the kit and print your logo properly — made to last the season, not to survive one wash. You get a photo of the finished shirt.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pitch">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Why bother</span>
+        <h2 class="display">What €35 buys here</h2>
+      </div>
+      <ol>
+        <li>
+          <span class="kit-no">1</span>
+          <strong>Seen on campus, not in a feed</strong>
+          <span class="line">A real pitch in Dortmund, a real league, and eleven students wearing your name across it every week — on the pitch, on the way there, and around campus afterwards.</span>
+        </li>
+        <li>
+          <span class="kit-no">2</span>
+          <strong>A season, not an impression</strong>
+          <span class="line">One payment covers every match, every training and every group photo until the season ends. Nobody scrolls past a shirt, and no ad blocker can save the opposing team.</span>
+        </li>
+        <li>
+          <span class="kit-no">3</span>
+          <strong>A story you can tell</strong>
+          <span class="line">"We sponsor a university football team" sounds excellent in a pitch deck, and costs less than one conference roll-up banner.</span>
+        </li>
+        <li>
+          <span class="kit-no">4</span>
+          <strong>Total transparency</strong>
+          <span class="line">The money buys the kits, the league fee and match balls. Every euro past that goes back into the shirt: a better blank and a better print. If there's still a surplus it buys the team döner, and we'll tell you.</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="stripe-rule" role="presentation"></div>
+
+  <section class="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">FAQ</span>
+        <h2 class="display">Fair questions</h2>
+      </div>
+      <details>
+        <summary>Is this serious?</summary>
+        <p>Completely. The jerseys are real, the league is real, and your logo will really be printed on them. The only fake thing was last season's chest sponsor — and that ran a full season without a single complaint.</p>
+      </details>
+      <details>
+        <summary>How do I actually pay?</summary>
+        <p data-when="card">Card, through Dodo Payments — we never see your card details. Pick a spot, pay the price shown, and upload your logo on the way back. If you would rather send a bank transfer, email us and we'll sort it out that way.</p>
+        <p data-when="email">Bank transfer for now — claim a spot by email, we confirm the price and send you the details. Card checkout is being switched on this week and will take one click.</p>
+      </details>
+      <details>
+        <summary>What does the money fund?</summary>
+        <p>New printed kits for the squad, the league entry fee, and match balls. The €630 goal covers exactly that. Anything above it goes into a better shirt rather than a bigger surplus.</p>
+      </details>
+      <details>
+        <summary>How good is the print, really?</summary>
+        <p>We order the kit once the spots are sold, so the more that sells the better the shirt we can buy. Whatever the budget ends up being, the logos go on as a proper print made to last the season. You approve the artwork before anything goes to the printer, and you get a photo of the finished shirt.</p>
+      </details>
+      <details>
+        <summary>Can two companies share the chest?</summary>
+        <p>The chest is single-occupancy — that's what makes it the chest. Sleeves, hem, nape and back spots are all separate, so bring a friend and take two spots instead.</p>
+      </details>
+      <details>
+        <summary>Will you print any logo?</summary>
+        <p>Almost. Betting, vapes, and anything the league rules wouldn't allow on a pitch are out. Yes, we are aware of the irony. Everything else — startups, kebab shops, law firms, your uncle's company — is welcome.</p>
+      </details>
+      <details>
+        <summary>Who was on the shirt last season?</summary>
+        <p>A logo we put there ourselves. Nobody signed anything, nobody paid anything, and the company still has no idea. That is exactly why the chest is empty this season.</p>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <p class="sig">Brand our jersey.<br>Fund our season.</p>
+      <p><a href="mailto:hello@brandourjersey.com">hello@brandourjersey.com</a></p>
+    </div>
+    <p class="fine">A student football team in Dortmund. Inspired by brandmymac.com. Spots, prices, and the artwork are agreed with you before anything gets printed.</p>
+  </div>
+</footer>
+
+<dialog id="claim-dialog" aria-labelledby="claim-title">
+  <form id="claim-form">
+    <h2 id="claim-title" class="display">Take this spot</h2>
+    <p class="claim-lede">Give us your website and we'll take the logo from there. You can send us a better one after.</p>
+    <label for="claim-url">Your website</label>
+    <input id="claim-url" name="url" type="text" placeholder="acme.de" autocomplete="url" spellcheck="false" required>
+    <p class="claim-error" id="claim-error" role="alert" hidden></p>
+    <div class="claim-actions">
+      <button type="button" id="claim-cancel">Cancel</button>
+      <button type="submit" id="claim-submit">Continue to payment</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="logo-dialog" aria-labelledby="logo-title">
+  <form id="logo-form">
+    <h2 id="logo-title" class="display">You're on the shirt</h2>
+    <p class="claim-lede" id="logo-lede">Add your logo and it goes on the jersey straight away. PNG, JPG or WebP.</p>
+    <label for="logo-file">Your logo</label>
+    <input id="logo-file" name="logo" type="file" accept="image/png,image/jpeg,image/webp" required>
+    <label class="logo-check"><input type="checkbox" id="logo-strip" checked> Drop the background so the stripes show through</label>
+    <div id="logo-preview" hidden><img id="logo-preview-img" alt="Your logo, as it will appear on the shirt"></div>
+    <p class="claim-error" id="logo-error" role="alert" hidden></p>
+    <div class="claim-actions">
+      <button type="button" id="logo-skip">Send it later</button>
+      <button type="submit" id="logo-submit">Put it on the shirt</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+  /* ═══════════════════════════════════════════════════════════
+     THE TWO THINGS YOU EDIT.
+
+     API_BASE  Your deployed Worker, e.g.
+                 "https://brandourjersey-api.you.workers.dev"
+               Leave it "" and the page runs with no backend at
+               all: buttons fall back to the email links.
+
+     SPONSORS  Manual overrides. The Worker already marks a spot
+               taken the moment someone pays, using their site's
+               favicon as the logo. When you want a proper logo
+               instead, drop the file in sponsors/ and add a line:
+
+                 3: { name: "Acme GmbH",
+                      url:  "https://acme.de",
+                      logo: "sponsors/acme.png" },
+
+               A line here always beats what the Worker says, so
+               this is also how you sell a spot offline.
+     ═══════════════════════════════════════════════════════════ */
+  var API_BASE = "";
+
+  /* Until card checkout is switched on, the page must not describe a checkout
+     it cannot deliver. Everything marked data-when swaps with this one flag. */
+  document.documentElement.setAttribute(
+    "data-flow",
+    API_BASE ? "card" : "email"
+  );
+
+  var SPONSORS = {
+    // 1: { name: "", url: "", logo: "" },
+  };
+
+  var SPOT_IDS = [1, 2, 3, 4, 5, 6, 7];
+
+  (function () {
+    var btnFront = document.getElementById("btn-front");
+    var btnBack = document.getElementById("btn-back");
+    var viewFront = document.getElementById("view-front");
+    var viewBack = document.getElementById("view-back");
+
+    var flip = document.getElementById("flip");
+    function setView(name) {
+      var front = name === "front";
+      flip.classList.toggle("show-back", !front);
+      viewFront.classList.toggle("on", front);
+      viewBack.classList.toggle("on", !front);
+      btnFront.setAttribute("aria-pressed", String(front));
+      btnBack.setAttribute("aria-pressed", String(!front));
+    }
+    btnFront.addEventListener("click", function () { setView("front"); });
+    btnBack.addEventListener("click", function () { setView("back"); });
+
+    function zonesFor(id) {
+      return document.querySelectorAll('.zone[data-spot="' + id + '"]');
+    }
+    function cardFor(id) {
+      return document.querySelector('.spot-card[data-spot="' + id + '"]');
+    }
+
+    document.querySelectorAll(".spot-card").forEach(function (card) {
+      var id = card.dataset.spot;
+      card.addEventListener("mouseenter", function () {
+        setView(card.dataset.view);
+        zonesFor(id).forEach(function (z) { z.classList.add("hot"); });
+      });
+      card.addEventListener("mouseleave", function () {
+        zonesFor(id).forEach(function (z) { z.classList.remove("hot"); });
+      });
+    });
+
+    document.querySelectorAll(".zone").forEach(function (zone) {
+      var id = zone.dataset.spot;
+      zone.addEventListener("mouseenter", function () {
+        var card = cardFor(id);
+        if (card) card.classList.add("hot");
+      });
+      zone.addEventListener("mouseleave", function () {
+        var card = cardFor(id);
+        if (card) card.classList.remove("hot");
+      });
+      zone.addEventListener("click", function () {
+        var card = cardFor(id);
+        if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
+
+    var SVGNS = "http://www.w3.org/2000/svg";
+
+    /* The chest is the marquee spot but its box is wide and short, so a square
+       logo shrinks to the height. Let it grow past the box — there is empty
+       shirt above and below it. Nothing may exceed the body width. */
+    var LOGO_BOOST = { 1: 1.4 };
+    var BODY_WIDTH = 180;
+
+    /* A supplied logo file wins. Otherwise the sponsor's name goes on as a
+       wordmark, the way most kits carry their sponsor. */
+    function paintSponsor(zone, sponsor) {
+      var rect = zone.querySelector("rect");
+      if (!rect) return;
+      var x = parseFloat(rect.getAttribute("x"));
+      var y = parseFloat(rect.getAttribute("y"));
+      var w = parseFloat(rect.getAttribute("width"));
+      var h = parseFloat(rect.getAttribute("height"));
+
+      var pad = Math.min(w, h) * 0.06;
+      var bx = x + pad, by = y + pad;
+      var bw = w - pad * 2, bh = h - pad * 2;
+      var boost = LOGO_BOOST[zone.dataset.spot];
+      if (boost) {
+        var nw = Math.min(bw * boost, BODY_WIDTH);
+        var nh = bh * boost;
+        bx -= (nw - bw) / 2;
+        by -= (nh - bh) / 2;
+        bw = nw;
+        bh = nh;
+      }
+
+      if (sponsor.logo) {
+        var img = document.createElementNS(SVGNS, "image");
+        img.setAttribute("href", sponsor.logo);
+        img.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", sponsor.logo);
+        img.setAttribute("x", bx);
+        img.setAttribute("y", by);
+        img.setAttribute("width", bw);
+        img.setAttribute("height", bh);
+        img.setAttribute("preserveAspectRatio", "xMidYMid meet");
+        img.setAttribute("class", "zone-logo");
+        zone.appendChild(img);
+        return;
+      }
+
+      var label = document.createElementNS(SVGNS, "text");
+      label.setAttribute("class", "zone-wordmark");
+      label.setAttribute("x", bx + bw / 2);
+      label.setAttribute("y", by + bh / 2);
+      label.setAttribute("text-anchor", "middle");
+      label.setAttribute("dominant-baseline", "central");
+      label.textContent = sponsor.name;
+      zone.appendChild(label);
+
+      /* Shrink to fit rather than spill outside the spot. Set as inline style,
+         not a presentation attribute — the stylesheet would outrank one. */
+      var size = Math.min(bh * 0.62, 34);
+      label.style.fontSize = size + "px";
+      try {
+        var box = label.getBBox();
+        var room = bw * 0.92;
+        if (box.width > room) {
+          label.style.fontSize = Math.max(7, size * room / box.width) + "px";
+        }
+      } catch (err) {
+        /* getBBox throws when the SVG is not laid out yet; the default size
+           is close enough that leaving it is better than dropping the name. */
+      }
+    }
+
+    /* Who owns what right now. SPONSORS is seeded first so a manual
+       entry always outranks whatever the Worker reports. */
+    var sold = {};
+    SPOT_IDS.forEach(function (id) {
+      if (SPONSORS[id]) sold[id] = SPONSORS[id];
+    });
+
+    var dialog = document.getElementById("claim-dialog");
+    var form = document.getElementById("claim-form");
+    var input = document.getElementById("claim-url");
+    var errorLine = document.getElementById("claim-error");
+    var submit = document.getElementById("claim-submit");
+    var openSpotId = null;
+
+    function render() {
+      var taken = 0;
+
+      SPOT_IDS.forEach(function (id) {
+        var card = cardFor(id);
+        if (!card) return;
+        var claim = card.querySelector(".claim");
+        var pill = card.querySelector(".pill");
+        var sponsor = sold[id];
+
+        /* Rendering runs again when the Worker answers, so undo the
+           previous pass before drawing the new one. */
+        card.classList.remove("sold");
+        if (pill) pill.classList.remove("taken");
+        if (claim) claim.classList.remove("taken");
+        zonesFor(id).forEach(function (zone) {
+          zone.classList.remove("sold");
+          /* Both, or an uploaded logo lands on top of the name drawn earlier. */
+          zone.querySelectorAll(".zone-logo, .zone-wordmark").forEach(function (el) {
+            el.remove();
+          });
+        });
+
+        if (sponsor) {
+          taken++;
+          card.classList.add("sold");
+          if (pill) {
+            pill.textContent = "Taken";
+            pill.classList.add("taken");
+          }
+          if (claim) {
+            claim.textContent = sponsor.name;
+            claim.classList.add("taken");
+            if (sponsor.url) {
+              claim.href = sponsor.url;
+              claim.target = "_blank";
+              claim.rel = "noopener";
+            } else {
+              claim.removeAttribute("href");
+            }
+          }
+          zonesFor(id).forEach(function (zone) {
+            zone.classList.add("sold");
+            paintSponsor(zone, sponsor);
+          });
+        }
+      });
+
+      var num = document.getElementById("stat-num");
+      var lbl = document.getElementById("stat-lbl");
+      if (num && lbl && taken > 0) {
+        num.textContent = taken + "/" + SPOT_IDS.length;
+        lbl.textContent = taken === 1 ? "spot taken" : "spots taken";
+      }
+    }
+
+    function showError(message) {
+      if (!errorLine) return;
+      errorLine.textContent = message;
+      errorLine.hidden = !message;
+    }
+
+    /* With a Worker behind it the button opens checkout. Without one it
+       stays the plain email link that is already in the HTML. */
+    if (API_BASE && dialog && form) {
+      document.querySelectorAll(".spot-card").forEach(function (card) {
+        var claim = card.querySelector(".claim");
+        if (!claim) return;
+        claim.addEventListener("click", function (event) {
+          if (sold[card.dataset.spot]) return;
+          event.preventDefault();
+          openSpotId = card.dataset.spot;
+          var heading = card.querySelector("h3");
+          var title = document.getElementById("claim-title");
+          if (title) {
+            title.textContent =
+              "Take " + (heading ? heading.textContent : "spot " + openSpotId);
+          }
+          showError("");
+          input.value = "";
+          dialog.showModal();
+          input.focus();
+        });
+      });
+
+      var cancel = document.getElementById("claim-cancel");
+      if (cancel) {
+        cancel.addEventListener("click", function () { dialog.close(); });
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        showError("");
+        submit.disabled = true;
+        submit.textContent = "Opening checkout…";
+
+        fetch(API_BASE + "/api/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            spotId: Number(openSpotId),
+            url: input.value,
+            /* Come back to this page, not a hardcoded one — that is what makes
+               a local copy testable without touching the live site. */
+            returnTo: window.location.origin + window.location.pathname
+          })
+        })
+          .then(function (res) {
+            return res.json().then(function (data) {
+              return { ok: res.ok, data: data };
+            });
+          })
+          .then(function (result) {
+            if (result.ok && result.data.checkoutUrl) {
+              window.location.href = result.data.checkoutUrl;
+              return;
+            }
+            showError(result.data.error || "Something went wrong. Try again.");
+            submit.disabled = false;
+            submit.textContent = "Continue to payment";
+          })
+          .catch(function () {
+            showError("We could not reach the checkout. Try again in a moment.");
+            submit.disabled = false;
+            submit.textContent = "Continue to payment";
+          });
+      });
+    }
+
+    render();
+
+    /* If the Worker is unreachable the page keeps whatever SPONSORS says,
+       so a backend outage never takes the site down with it. */
+    function refresh() {
+      if (!API_BASE) return Promise.resolve();
+      return fetch(API_BASE + "/api/spots")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          var claimed = (data && data.taken) || {};
+          SPOT_IDS.forEach(function (id) {
+            if (SPONSORS[id]) return;
+            if (!claimed[id]) return;
+            var entry = claimed[id];
+            /* The API returns a path; the file lives on the Worker. */
+            if (entry.logo && entry.logo.charAt(0) === "/") {
+              entry = {
+                name: entry.name,
+                url: entry.url,
+                logo: API_BASE + entry.logo + "?v=" + Date.now()
+              };
+            }
+            sold[id] = entry;
+          });
+          render();
+        })
+        .catch(function () { });
+    }
+
+    refresh();
+
+    /* Count the visit, then show the total — but only once it is a number
+       worth showing. "3 people have looked" argues against us. */
+    if (API_BASE) {
+      fetch(API_BASE + "/api/visit", { method: "POST" })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          var views = data && data.views;
+          if (!views || views < 25) return;
+          var tile = document.getElementById("stat-views");
+          var num = document.getElementById("views-num");
+          if (!tile || !num) return;
+          num.textContent = views >= 1000
+            ? (views / 1000).toFixed(1).replace(/\.0$/, "") + "k"
+            : String(views);
+          tile.hidden = false;
+        })
+        .catch(function () { });
+    }
+
+    /* ── After payment: offer to put a real logo on the shirt ───────── */
+
+    var params = new URLSearchParams(window.location.search);
+    var claimedSpot = params.get("claimed");
+    var uploadToken = params.get("t");
+    var logoDialog = document.getElementById("logo-dialog");
+    var logoForm = document.getElementById("logo-form");
+    var logoFile = document.getElementById("logo-file");
+    var logoError = document.getElementById("logo-error");
+    var logoSubmit = document.getElementById("logo-submit");
+    var logoPreview = document.getElementById("logo-preview");
+    var logoPreviewImg = document.getElementById("logo-preview-img");
+    var pendingDataUrl = null;
+
+    function logoProblem(message) {
+      logoError.textContent = message;
+      logoError.hidden = !message;
+    }
+
+    /* Flood-fill inwards from the edges. Working from the border rather than
+       recolouring every matching pixel means a logo that happens to contain
+       the background colour inside itself survives intact. */
+    function stripBackground(canvas) {
+      var ctx = canvas.getContext("2d");
+      var w = canvas.width, h = canvas.height;
+      var image = ctx.getImageData(0, 0, w, h);
+      var d = image.data;
+
+      function at(x, y) {
+        var i = (y * w + x) * 4;
+        return [d[i], d[i + 1], d[i + 2], d[i + 3]];
+      }
+      var corners = [at(0, 0), at(w - 1, 0), at(0, h - 1), at(w - 1, h - 1)];
+      /* Already cut out — leave it alone. */
+      if (corners.some(function (c) { return c[3] < 250; })) return;
+
+      var base = corners[0];
+      var uniform = corners.every(function (c) {
+        return Math.abs(c[0] - base[0]) < 12 &&
+               Math.abs(c[1] - base[1]) < 12 &&
+               Math.abs(c[2] - base[2]) < 12;
+      });
+      /* Corners disagree, so there is no single background to remove. */
+      if (!uniform) return;
+
+      var tolerance = 42;
+      var seen = new Uint8Array(w * h);
+      var queue = [];
+      function consider(x, y) {
+        if (x < 0 || y < 0 || x >= w || y >= h) return;
+        var p = y * w + x;
+        if (seen[p]) return;
+        var i = p * 4;
+        if (Math.abs(d[i] - base[0]) > tolerance ||
+            Math.abs(d[i + 1] - base[1]) > tolerance ||
+            Math.abs(d[i + 2] - base[2]) > tolerance) return;
+        seen[p] = 1;
+        queue.push(p);
+      }
+      for (var x = 0; x < w; x++) { consider(x, 0); consider(x, h - 1); }
+      for (var y = 0; y < h; y++) { consider(0, y); consider(w - 1, y); }
+      while (queue.length) {
+        var p = queue.pop();
+        d[p * 4 + 3] = 0;
+        var cx = p % w, cy = (p - cx) / w;
+        consider(cx + 1, cy);
+        consider(cx - 1, cy);
+        consider(cx, cy + 1);
+        consider(cx, cy - 1);
+      }
+      ctx.putImageData(image, 0, 0);
+    }
+
+    /* Scale down in the browser so a 4 MB export still arrives as a sensible
+       file, and so every logo lands at a predictable size. */
+    function prepare(img, strip) {
+      var sizes = [512, 384, 256];
+      for (var i = 0; i < sizes.length; i++) {
+        var scale = Math.min(1, sizes[i] / Math.max(img.width, img.height));
+        var canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(img.width * scale));
+        canvas.height = Math.max(1, Math.round(img.height * scale));
+        canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+        if (strip) stripBackground(canvas);
+        /* PNG throughout: JPEG would fill the transparency back in. */
+        var out = canvas.toDataURL("image/png");
+        if (out.length <= 380 * 1024 || i === sizes.length - 1) return out;
+      }
+    }
+
+    function loadImage(file) {
+      return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+        reader.onerror = function () { reject(new Error("Could not read that file")); };
+        reader.onload = function () {
+          var img = new Image();
+          img.onerror = function () { reject(new Error("That file is not an image we can read")); };
+          img.onload = function () { resolve(img); };
+          img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    var logoStrip = document.getElementById("logo-strip");
+    var loadedImage = null;
+
+    function redrawPreview() {
+      if (!loadedImage) return;
+      pendingDataUrl = prepare(loadedImage, logoStrip && logoStrip.checked);
+      logoPreviewImg.src = pendingDataUrl;
+      logoPreview.hidden = false;
+    }
+
+    if (logoFile) {
+      logoFile.addEventListener("change", function () {
+        logoProblem("");
+        pendingDataUrl = null;
+        loadedImage = null;
+        logoPreview.hidden = true;
+        var file = logoFile.files && logoFile.files[0];
+        if (!file) return;
+        loadImage(file).then(function (img) {
+          loadedImage = img;
+          redrawPreview();
+        }).catch(function (err) {
+          logoProblem(err.message);
+        });
+      });
+    }
+
+    if (logoStrip) logoStrip.addEventListener("change", redrawPreview);
+
+    if (logoForm) {
+      logoForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (!pendingDataUrl) { logoProblem("Pick a file first"); return; }
+        logoProblem("");
+        logoSubmit.disabled = true;
+        logoSubmit.textContent = "Putting it on…";
+
+        fetch(API_BASE + "/api/logo", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            spotId: Number(claimedSpot),
+            token: uploadToken,
+            dataUrl: pendingDataUrl
+          })
+        })
+          .then(function (res) {
+            return res.json().then(function (d) { return { ok: res.ok, data: d }; });
+          })
+          .then(function (result) {
+            logoSubmit.disabled = false;
+            logoSubmit.textContent = "Put it on the shirt";
+            if (!result.ok) {
+              logoProblem(result.data.error || "That did not go through. Try again.");
+              return;
+            }
+            logoDialog.close();
+            refresh();
+          })
+          .catch(function () {
+            logoSubmit.disabled = false;
+            logoSubmit.textContent = "Put it on the shirt";
+            logoProblem("We could not reach the server. Try again in a moment.");
+          });
+      });
+    }
+
+    var logoSkip = document.getElementById("logo-skip");
+    if (logoSkip) {
+      logoSkip.addEventListener("click", function () { logoDialog.close(); });
+    }
+
+    if (API_BASE && claimedSpot && uploadToken && logoDialog) {
+      var lede = document.getElementById("logo-lede");
+      var card = cardFor(claimedSpot);
+      var spotName = card ? (card.querySelector("h3") || {}).textContent : null;
+      if (lede && spotName) {
+        lede.textContent =
+          spotName + " is yours for the season. Add your logo and it goes on the " +
+          "jersey straight away. PNG, JPG or WebP.";
+      }
+      logoDialog.showModal();
+      /* Drop the token from the address bar so it is not left lying around
+         in history or copied into a shared link. */
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  })();
+</script>
+
+</html>

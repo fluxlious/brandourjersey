@@ -1,0 +1,8 @@
+# Original camera/Instagram exports — the web-sized copies (team.jpg, logo.png) are what ship
+6*_1*.jpg
+7*_1*.jpg
+
+node_modules/
+.wrangler/
+.dev.vars
+local-test.html

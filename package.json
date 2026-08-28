@@ -1,0 +1,13 @@
+{
+  "name": "brandourjersey",
+  "private": true,
+  "description": "Sponsor spots on a student football team's jersey",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "logs": "wrangler tail",
+    "claims": "wrangler d1 execute brandourjersey --remote --command \"SELECT * FROM claims\""
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
